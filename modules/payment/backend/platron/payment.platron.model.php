@@ -1,7 +1,7 @@
 <?php
 /**
  * Формирует данные для формы платежной системы Platron
- * 
+ *
  * @package    DIAFAN.CMS
  * @author     diafan.ru
  * @version    5.4
@@ -18,7 +18,7 @@ class Payment_platron_model extends Diafan
 {
 	/**
      * Формирует данные для формы платежной системы "Platron"
-     * 
+     *
      * @param array $params настройки платежной системы
      * @param array $pay данные о платеже
      * @return void
@@ -29,7 +29,7 @@ class Payment_platron_model extends Diafan
 		$strLang = 'en';
 		if($this->diafan->_languages->site)
 			$strLang = 'ru';
-		
+
 		$strDescription = '';
 		foreach($pay['details']['goods'] as $arrProduct){
 			$strDescription .= $arrProduct['name'];
@@ -37,16 +37,16 @@ class Payment_platron_model extends Diafan
 				$strDescription .= "*".$arrProduct['count'];
 			$strDescription .= "; ";
 		}
-		
+
 		foreach($pay['details']['additional'] as $arrProduct)
 			$strDescription .= $arrProduct['name']."; ";
-		
+
 		if(!empty($pay['details']['delivery']))
 			$strDescription .= $pay['details']['delivery']['name'];
-		
+
 		if(strlen($strDescription) > 250)
 			$strDescription = substr($strDescription, 0, 250)."...";
-		
+
 		$arrFields = array(
 			'pg_merchant_id'		=> $params['platron_merchant_id'],
 			'pg_order_id'			=> $pay['id'],
@@ -70,18 +70,18 @@ class Payment_platron_model extends Diafan
 			$strPhone = implode('',@$array[0]);
 			$arrFields['pg_user_phone'] = $strPhone;
 		}
-		
+
 		if(!empty($pay['details']['email'])){
 			$arrFields['pg_user_email'] = $pay['details']['email'];
 			$arrFields['pg_user_contact_email'] = $pay['details']['email'];
 		}
-		
+
 		if(!empty($params['platron_payment_system']))
 			$arrFields['pg_payment_system'] = $params['platron_payment_system'];
 
 		$arrFields['pg_sig'] = PG_Signature::make('payment.php', $arrFields, $params['platron_secret_key']);
-		
-		echo "<form action='https://paybox.kz/payment.php' method='POST' name='platronform' id='platronform'>";
+
+		echo "<form action='https://api.paybox.money/payment.php' method='POST' name='platronform' id='platronform'>";
 
 		foreach ($arrFields as $name => $value)
 		{
@@ -89,7 +89,7 @@ class Payment_platron_model extends Diafan
 		}
 //		echo "<input type='submit' value='оплатить'></form>"; не знаю есть ли такие, у кого не работает javascript
 		echo "<script type='text/javascript'>document.platronform.submit();</script>";
-		
+
 		exit;
 	}
 }
