@@ -1,6 +1,6 @@
 <?php
 /**
- * Формирует данные для формы платежной системы Platron
+ * Формирует данные для формы платежной системы Paybox
  *
  * @package    DIAFAN.CMS
  * @author     diafan.ru
