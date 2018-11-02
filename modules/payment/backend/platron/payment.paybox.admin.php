@@ -14,20 +14,20 @@ if (! defined('DIAFAN'))
 	include dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/includes/404.php';
 }
 
-class Payment_platron_admin
+class Payment_paybox_admin
 {
 	public $config;
 
 	public function __construct()
 	{
 		$this->config = array(
-			"name" => 'Platron',
+			"name" => 'Paybox',
 			"params" => array(
-                'platron_merchant_id' => 'Номер магазина',
-                'platron_secret_key' => 'Секретный ключ',
-                'platron_lifetime' => 'Время жизни счета в минутах. Максимально 7 дней',
-				'platron_test' => array('name' => 'Тестовый режим', 'type' => 'checkbox'),
-				'platron_payment_system' => 'Название платежной системы, на которую указывает метод',
+                'paybox_merchant_id' => 'Номер магазина',
+                'paybox_secret_key' => 'Секретный ключ',
+                'paybox_lifetime' => 'Время жизни счета в минутах. Максимально 7 дней',
+				'paybox_test' => array('name' => 'Тестовый режим', 'type' => 'checkbox'),
+				'paybox_payment_system' => 'Название платежной системы, на которую указывает метод',
 			)
 		);
 	}
