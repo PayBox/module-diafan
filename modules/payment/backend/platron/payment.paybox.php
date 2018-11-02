@@ -1,6 +1,6 @@
 <?php
 /**
- * Обработка данных, полученных от системы Platron
+ * Обработка данных, полученных от системы Paybox
  * 
  * @package    DIAFAN.CMS
  * @author     diafan.ru
@@ -25,10 +25,10 @@ if (empty($arrRequest["pg_order_id"]))
 	Custom::inc('includes/404.php');
 }
 unset($arrRequest['rewrite']);
-$pay = $this->diafan->_payment->check_pay($_REQUEST["pg_order_id"], 'platron');
+$pay = $this->diafan->_payment->check_pay($_REQUEST["pg_order_id"], 'paybox');
 
 $thisScriptName = PG_Signature::getOurScriptName();
-if (empty($arrRequest['pg_sig']) || !PG_Signature::check($arrRequest['pg_sig'], $thisScriptName, $arrRequest, $pay['params']['platron_secret_key']))
+if (empty($arrRequest['pg_sig']) || !PG_Signature::check($arrRequest['pg_sig'], $thisScriptName, $arrRequest, $pay['params']['paybox_secret_key']))
 	die("Wrong signature");
 
 if($arrRequest['type'] == 'check'){
@@ -41,7 +41,7 @@ if($arrRequest['type'] == 'check'){
 	$arrResponse['pg_salt']              = $arrRequest['pg_salt']; // в ответе необходимо указывать тот же pg_salt, что и в запросе
 	$arrResponse['pg_status']            = $bCheckResult ? 'ok' : 'error';
 	$arrResponse['pg_error_description'] = $bCheckResult ?  ""  : $error_desc;
-	$arrResponse['pg_sig']				 = PG_Signature::make($thisScriptName, $arrResponse, $pay['params']['platron_secret_key']);
+	$arrResponse['pg_sig']				 = PG_Signature::make($thisScriptName, $arrResponse, $pay['params']['paybox_secret_key']);
 
 	$objResponse = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?><response/>');
 	$objResponse->addChild('pg_salt', $arrResponse['pg_salt']);
@@ -81,7 +81,7 @@ elseif($arrRequest['type'] == 'result'){
 	$objResponse->addChild('pg_salt', $arrRequest['pg_salt']); // в ответе необходимо указывать тот же pg_salt, что и в запросе
 	$objResponse->addChild('pg_status', $strResponseStatus);
 	$objResponse->addChild('pg_description', $strResponseDescription);
-	$objResponse->addChild('pg_sig', PG_Signature::makeXML($thisScriptName, $objResponse, $pay['params']['platron_secret_key']));
+	$objResponse->addChild('pg_sig', PG_Signature::makeXML($thisScriptName, $objResponse, $pay['params']['paybox_secret_key']));
 	
 	header("Content-type: text/xml");
 	echo $objResponse->asXML();
