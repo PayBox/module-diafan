@@ -14,7 +14,7 @@ if (! defined('DIAFAN'))
 	include dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/includes/404.php';
 }
 
-class Payment_platron_model extends Diafan
+class Payment_paybox_model extends Diafan
 {
 	/**
      * Формирует данные для формы платежной системы "Platron"
@@ -48,19 +48,19 @@ class Payment_platron_model extends Diafan
 			$strDescription = substr($strDescription, 0, 250)."...";
 
 		$arrFields = array(
-			'pg_merchant_id'		=> $params['platron_merchant_id'],
+			'pg_merchant_id'		=> $params['paybox_merchant_id'],
 			'pg_order_id'			=> $pay['id'],
 			'pg_currency'			=> 'KZT',
 			'pg_amount'				=> sprintf('%0.2f',$pay['summ']),
-			'pg_lifetime'			=> isset($params['platron_lifetime'])?$params['platron_lifetime']*60:0,
-			'pg_testing_mode'		=> ($params['platron_test'])?1:0,
+			'pg_lifetime'			=> isset($params['paybox_lifetime'])?$params['paybox_lifetime']*60:0,
+			'pg_testing_mode'		=> ($params['paybox_test'])?1:0,
 			'pg_description'		=> $strDescription,
 			'pg_user_ip'			=> $_SERVER['REMOTE_ADDR'],
 			'pg_language'			=> $strLang,
-			'pg_check_url'			=> BASE_PATH.'payment/get/platron/index.php?type=check',
-			'pg_result_url'			=> BASE_PATH.'payment/get/platron/index.php?type=result',
-			'pg_success_url'		=> BASE_PATH.'payment/get/platron/index.php?type=success',
-			'pg_failure_url'		=> BASE_PATH.'payment/get/platron/index.php?type=fail',
+			'pg_check_url'			=> BASE_PATH.'payment/get/paybox/index.php?type=check',
+			'pg_result_url'			=> BASE_PATH.'payment/get/paybox/index.php?type=result',
+			'pg_success_url'		=> BASE_PATH.'payment/get/paybox/index.php?type=success',
+			'pg_failure_url'		=> BASE_PATH.'payment/get/paybox/index.php?type=fail',
 			'pg_request_method'		=> 'GET',
 			'pg_salt'				=> rand(21,43433), // Параметры безопасности сообщения. Необходима генерация pg_salt и подписи сообщения.
 		);
@@ -76,19 +76,19 @@ class Payment_platron_model extends Diafan
 			$arrFields['pg_user_contact_email'] = $pay['details']['email'];
 		}
 
-		if(!empty($params['platron_payment_system']))
-			$arrFields['pg_payment_system'] = $params['platron_payment_system'];
+		if(!empty($params['paybox_payment_system']))
+			$arrFields['pg_payment_system'] = $params['paybox_payment_system'];
 
-		$arrFields['pg_sig'] = PG_Signature::make('payment.php', $arrFields, $params['platron_secret_key']);
+		$arrFields['pg_sig'] = PG_Signature::make('payment.php', $arrFields, $params['paybox_secret_key']);
 
-		echo "<form action='https://api.paybox.money/payment.php' method='POST' name='platronform' id='platronform'>";
+		echo "<form action='https://api.paybox.money/payment.php' method='POST' name='payboxform' id='payboxform'>";
 
 		foreach ($arrFields as $name => $value)
 		{
 			echo "<input type='hidden' name='$name' value='$value' />";
 		}
 //		echo "<input type='submit' value='оплатить'></form>"; не знаю есть ли такие, у кого не работает javascript
-		echo "<script type='text/javascript'>document.platronform.submit();</script>";
+		echo "<script type='text/javascript'>document.payboxform.submit();</script>";
 
 		exit;
 	}
