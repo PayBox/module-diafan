@@ -50,7 +50,6 @@ class Payment_paybox_model extends Diafan
 		$arrFields = array(
 			'pg_merchant_id'		=> $params['paybox_merchant_id'],
 			'pg_order_id'			=> $pay['id'],
-			'pg_currency'			=> 'KZT',
 			'pg_amount'				=> sprintf('%0.2f',$pay['summ']),
 			'pg_lifetime'			=> isset($params['paybox_lifetime'])?$params['paybox_lifetime']*60:0,
 			'pg_testing_mode'		=> ($params['paybox_test'])?1:0,
