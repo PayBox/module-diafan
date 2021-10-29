@@ -53,7 +53,7 @@ class Payment_paybox_model extends Diafan
 			'pg_amount'				=> sprintf('%0.2f',$pay['summ']),
 			'pg_lifetime'			=> isset($params['paybox_lifetime'])?$params['paybox_lifetime']*60:0,
 			'pg_testing_mode'		=> ($params['paybox_test'])?1:0,
-			'pg_description'		=> htmlentities($strDescription),
+			'pg_description'		=> 'Оплата заказа №' . $pay['id'],
 			'pg_user_ip'			=> $_SERVER['REMOTE_ADDR'],
 			'pg_language'			=> $strLang,
 			'pg_check_url'			=> BASE_PATH.'payment/get/paybox/index.php?type=check',
